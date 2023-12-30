@@ -8,6 +8,7 @@ public class Health : MonoBehaviour
     [SerializeField] private GameObject explosionPref;
     [SerializeField] private int defaultHealthPoint;
     private int _healthPoint;
+    public System.Action onDead;
     // Start is called before the first frame update
     private void Start() => _healthPoint = defaultHealthPoint;
     public void OnTriggerEnter2D(Collider2D collision) => Die();
@@ -17,6 +18,7 @@ public class Health : MonoBehaviour
         var explosion = Instantiate(explosionPref, transform.position, Quaternion.identity);
         Destroy(explosion, 1);
         Destroy(gameObject);
+        onDead?.Invoke();
     }
 
     public void TakeDamage(int damage)
