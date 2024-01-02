@@ -6,11 +6,18 @@ using UnityEngine;
 public class Health : MonoBehaviour
 {
     [SerializeField] private GameObject explosionPref;
-    [SerializeField] private int defaultHealthPoint;
+    public int defaultHealthPoint;
     private int _healthPoint;
     public System.Action onDead;
+    public System.Action onHealthChange;
+    public int healthPoint;
     // Start is called before the first frame update
-    private void Start() => _healthPoint = defaultHealthPoint;
+    private void Start()
+    {
+        _healthPoint = defaultHealthPoint;
+        onHealthChange?.Invoke();
+    }
+
     public void OnTriggerEnter2D(Collider2D collision) => Die();
 
     protected virtual void Die()
@@ -25,6 +32,7 @@ public class Health : MonoBehaviour
     {
         if (_healthPoint <= 0) return;
         _healthPoint -= damage;
+        onHealthChange?.Invoke();
         if (_healthPoint <= 0) Die();
 
     }
